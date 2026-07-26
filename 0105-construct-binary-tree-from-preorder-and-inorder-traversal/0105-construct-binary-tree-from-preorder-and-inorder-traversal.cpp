@@ -12,22 +12,22 @@
 class Solution {
 public:
     int preidx=0;
+    unordered_map<int,int> mp;
     TreeNode* helper(vector<int>& pre,vector<int>& in,int start,int end){
+        
+        
         if(end<start)
         return nullptr;
-        int inidx;
+        
         TreeNode* root=new TreeNode(pre[preidx++]);
-        for(int i=start;i<=end;i++){
-            if(in[i]==root->val){
-                inidx=i;
-                break;
-            }
-        }
+        int inidx=mp[root->val];
         root->left=helper(pre,in,start,inidx-1);
         root->right=helper(pre,in,inidx+1,end);
         return root;
     }
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        for(int i=0;i<inorder.size();i++)
+        mp[inorder[i]]=i;
         return helper(preorder,inorder,0,preorder.size()-1);
     }
 };

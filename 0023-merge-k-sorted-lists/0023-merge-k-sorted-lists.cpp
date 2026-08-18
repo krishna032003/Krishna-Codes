@@ -8,45 +8,35 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+struct compare{
+    bool operator()(const ListNode* a,const ListNode* b){
+        return a->val > b->val;
+    }
+};
 
 class Solution {
 public:
-    struct Triplet{
-    int val;
-    int lpos;
-    ListNode* node;
-    Triplet(int v,int l,ListNode* n){
-        val=v;
-        lpos=l;
-        node=n;
-    }    
-    };
-    struct MyCmp{
-        bool operator()(const Triplet& a,const Triplet& b){
-            return a.val>b.val;
-        }
-    };
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-        priority_queue<Triplet,vector<Triplet>,MyCmp> pq;
+
+    ListNode* mergeKLists(vector<ListNode*>& lists) {        
+        priority_queue<ListNode*,vector<ListNode*>,compare> pq;
+
         for(int i=0;i<lists.size();i++){
-            if(lists[i])
-            pq.push(Triplet(lists[i]->val,i,lists[i]));
+            if(lists[i])pq.push(lists[i]);
         }
-        ListNode* dummy=new ListNode(-1);
-        ListNode* tail=dummy;
+        ListNode dummy(0);
+        ListNode* curr=&dummy;
+
         while(!pq.empty()){
-            Triplet curr=pq.top();
+            ListNode* node=pq.top();
             pq.pop();
-            tail->next=curr.node;
-            tail=tail->next;
-            if(curr.node->next){
-                Triplet t(curr.node->next->val,curr.lpos,curr.node->next);
-                pq.push(t);
-            }
+            curr->next=node;
+            curr=curr->next;
+            if(node->next) pq.push(node->next);
         }
-        return dummy->next;
+
+        return dummy.next;
+
     }
-    
 };
 
 // Synced seamlessly with LeetHub Pro

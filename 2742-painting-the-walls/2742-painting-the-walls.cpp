@@ -1,21 +1,20 @@
+#include <vector>
+#include <algorithm>
+using namespace std;
 class Solution {
 public:
-    int t[501][501];
-    int sol(vector<int>& cost, vector<int>& time,int i,int n){
-        if(n<=0)
-        return 0;
-        if(i>=cost.size())
-        return INT_MAX/2;
-        if(t[i][n]!=-1)
-        return t[i][n];
-        int skip=sol(cost,time,i+1,n);
-        int take=cost[i]+sol(cost,time,i+1,n-1-time[i]);
-        return t[i][n]=min(skip,take);
-    }
     int paintWalls(vector<int>& cost, vector<int>& time) {
-        
-        memset(t,-1,sizeof(t));
-        return sol(cost,time,0,cost.size());
+        int n=cost.size();
+        vector<int> dp(n+1,INT_MAX/2); 
+        dp[0]=0;
+        for(int i=0;i<n;i++){
+            int wallsCovered=time[i]+1;
+            int currentCost=cost[i];
+            for (int w=n;w>0;w--) {
+                dp[w]=min(dp[w]/*skip*/,currentCost+dp[max(0,w-wallsCovered)]/*paint*/);
+            }
+        }
+        return dp[n];
     }
 };
 

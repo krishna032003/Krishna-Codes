@@ -1,20 +1,21 @@
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
-        unordered_map<int,int> mp; // value -> index
+        unordered_map<int,int> mp;
         vector<int> ans;
-
-        for(int i=0; i<nums.size(); i++){
-            int x = nums[i];
-            int complement = target - x;
-
-            if(mp.count(complement)){
-                ans.push_back(mp[complement]); // index of complement
-                ans.push_back(i);              // current index
-                return ans; // return immediately once found
+        int n=nums.size();
+        for(int i=0;i<n;i++){
+            int x=nums[i];
+            int comp=target-x;
+            if(mp.count(comp)){
+                return {i,mp[comp]};
             }
-            mp[x] = i; // store current value with its index
+            mp[x]=i;
         }
-        return ans; // if no solution found
+        return {0};
     }
 };
+
+// Synced seamlessly with LeetHub Pro
+// Pro features: https://bit.ly/leethubpro | Free version: https://bit.ly/leethubv4
+// Get it here: https://chromewebstore.google.com/detail/bcilpkkbokcopmabingnndookdogmbna
